@@ -1,11 +1,35 @@
 import * as canvasUtility from './utility';
 
-var canvas = document.querySelector("canvas");
+// Mouse position
+let mouse = {
+    x: undefined,
+    y: undefined
+}
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
+let canvas = document.querySelector("canvas");
 var c = canvas.getContext('2d');
+
+addEventListener("mousemove", (e) => {
+    mouse.x = e.x;
+    mouse.y = e.y + pageYOffset;
+})
+
+// we should call init each time browser is resized
+addEventListener("resize", () => {
+    if (canvas.width !== innerWidth) {
+        init();
+    }
+})
+
+addEventListener('touchstart', (e) => {
+    mouse.x = e.touches[0].clientX;
+    mouse.y = e.touches[0].clientY;
+});
+
+let init = () => {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
 
 var x = 200;
 var y = 200;
@@ -18,8 +42,6 @@ const animate = () => {
     requestAnimationFrame(animate);
     // clear canvas on each iteration
     c.clearRect(0, 0, innerWidth, innerHeight);
-    // get mouse position
-    let mouse = canvasUtility.getMouse();
 
     c.beginPath();
 
@@ -47,4 +69,5 @@ const animate = () => {
     y += dy;
 }
 
+init();
 export default animate;
